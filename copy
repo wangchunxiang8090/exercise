@@ -1,0 +1,42 @@
+#!/usr/bin/env python 
+# -*- coding:utf-8 -*-
+
+import os
+import time
+import shutil
+import datetime
+
+DIRECTORY = os.path.abspath(os.getcwd())
+class copy(object):
+    """
+    该类用于copy整个目录或该目录下的第一层目录或文件，以空格分隔
+    """
+    def __init__(self,*args):
+        self.des_dir = os.path.join(DIRECTORY,'%s-%s-w' %(args[0],datetime.date.today()))
+
+    def copy(self,src,flag=None):
+        t = os.path.join(self.des_dir,os.path.basename(src))
+        if flag:
+            shutil.copytree(src,t)
+        else:
+            if not  os.path.isdir(os.path.dirname(t)):
+                os.makedirs(os.path.dirname(t))
+            shutil.copy(src,t)
+        res = os.popen('du -sh %s' %t).read().split()[0]
+        result = 'copy directory src: %s  det:%s [%s]' %(src,t,res) if flag else 'copy file src: %s  det: %s [%s]' %(src,t,res)
+        print result.strip()
+
+if __name__ == "__main__":
+    inp = raw_input("directory: ").split()
+    obj = copy(*inp)
+    new_inp = inp[1:]  if len(inp) > 1 else inp
+    for i in new_inp:
+        temp = os.path.join(DIRECTORY,inp[0],i) if len(inp) > 1 else os.path.join(DIRECTORY,i)
+        if os.path.isdir(temp):
+            obj.copy(temp,True)
+        elif os.path.isfile(temp):
+            obj.copy(temp)
+        else:
+            print('invalid file or directory: ',temp)
+
+
