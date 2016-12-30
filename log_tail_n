@@ -4,10 +4,10 @@
 import os
 import sys
 
-def log(tomcat,flag=0):
+def log(tomcat,line=10,flag=0):
     root = '/usr/local'
     log_file_path = os.path.join(root,tomcat,'logs')
-    command = 'tail -f %s/catalina-daemon.out' %(log_file_path)
+    command = 'tail -fn %s  %s/catalina-daemon.out' %(line,log_file_path)
     if not os.path.isdir(os.path.join(root,tomcat)):
         print("not exist directory %s" %os.path.join(root,tomcat))
         exit()
@@ -17,13 +17,15 @@ def log(tomcat,flag=0):
         with open(os.path.join(log_file_path,'catalina-daemon.out'),'w+') as f:
             os.system(command)
 def usage():
-    print('usage: %s tomcat_name [flag <0|1>]' %os.path.basename(os.path.abspath(__file__)))
+    print('usage: %s tomcat_name [line number] [flag <0|1>]' %os.path.basename(os.path.abspath(__file__)))
 
 if __name__ == "__main__":
     try:
         if len(sys.argv) <= 1:
             usage()
             exit()
+        if len(sys.argv) > 3:
+            log(sys.argv[1],sys.argv[2],sys.argv[3])
         excute = log(sys.argv[1],sys.argv[2]) if len(sys.argv) >2 else log(sys.argv[1])
     #except (KeyboardInterrupt,Exception):
     except Exception,e:
