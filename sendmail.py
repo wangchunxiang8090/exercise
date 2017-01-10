@@ -6,11 +6,10 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 def sendmail(sub,mail_content,to='2459244378@qq.com'):
-
 	try:
 		msg = MIMEText(mail_content, 'plain', 'utf-8')
-		msg['From'] = formataddr(["fafa",'python_used@163.com'])
-		msg['To'] = formataddr(["fafa",to])
+		msg['From'] = formataddr(["python_used@163.com",'python_used@163.com'])
+		msg['To'] = formataddr(["python_used@163.com",to])
 		msg['Subject'] = sub
 
 		server = smtplib.SMTP("smtp.163.com", 25)
@@ -20,4 +19,6 @@ def sendmail(sub,mail_content,to='2459244378@qq.com'):
 		return True
 	except:
 		return False
-
+if __name__ == "__main__":
+  content = "这是一封测试邮件"
+  sendmail(content,content)
